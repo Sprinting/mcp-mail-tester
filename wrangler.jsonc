@@ -1,0 +1,28 @@
+// Cloudflare Worker configuration.
+//
+// Nothing sensitive or policy-related lives here: the allowlist, SMTP
+// settings and the token hash are set in Cloudflare (see README.md).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mcp-mail-tester",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // Served at workers.dev, so a Deploy button deploy works for anyone. The
+  // deploy workflow switches to a custom domain when WORKER_DOMAIN is set
+  // (scripts/set-domain.mjs).
+  "workers_dev": true,
+  // Keep plain-text variables set in the dashboard across deploys.
+  "keep_vars": true,
+  "observability": { "enabled": true },
+  "kv_namespaces": [
+    // OAuth grants and tokens. No id: wrangler provisions the namespace on
+    // the first deploy; the deploy workflow writes its own namespace's id
+    // here at deploy time (scripts/ensure-kv.mjs).
+    { "binding": "OAUTH_KV","id": "b5f2bbdce3984e95bde8383da6006b9e" }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "RATE_LIMITER", "class_name": "RateLimiter" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["RateLimiter"] }]
+}

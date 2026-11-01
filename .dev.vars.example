@@ -1,0 +1,40 @@
+# Copy to .dev.vars for `wrangler dev`. Every value here is server-side only
+# configuration: it is never sent to, and never reaches, the LLM or MCP client.
+# The Deploy to Cloudflare button prompts for the uncommented keys; the
+# commented-out ones are optional.
+
+# Optional. sha256 (64 lowercase hex) of the operator token. Unset, the
+# server is unclaimed and only /setup works: open it to make a token and its
+# hash. For local dev, uncomment this line and sign in with `local-dev-token`
+# (regenerate for another token with `printf %s local-dev-token | sha256sum`).
+# Production uses /setup or `npm run rotate-token`.
+# MCP_AUTH_TOKEN_SHA256=0cd48eed49739dfdd99efaef37d251aae5a80866e5954763c6597943fff5ce9b
+# Optional. The Worker's public origin; unset, it is taken from each request.
+# PUBLIC_URL=http://localhost:8787
+
+SMTP_HOST=smtp.example.com
+# Optional. 465 (implicit TLS, default) or 587 (STARTTLS).
+# SMTP_PORT=465
+SMTP_USERNAME=sender@example.com
+# App-specific password.
+SMTP_PASSWORD=replace-with-app-specific-password
+# Optional; defaults to SMTP_USERNAME. Display name allowed.
+# SMTP_FROM=Mail Relay <sender@example.com>
+
+EMAIL_PER_MIN=5
+# Optional; per-connection cap on top of EMAIL_PER_MIN. Absent means none.
+# CLIENT_EMAIL_PER_MIN=3
+# Comma-separated bare addresses.
+MAIL_ALLOW_TO=alice@example.com,inbox@example.net
+# Optional; must be on MAIL_ALLOW_TO. Defaults to the first entry.
+# MAIL_DEFAULT_TO=alice@example.com
+# Optional; absent means no cap.
+# MAX_BODY_BYTES=100000
+# Optional; the https redirect allowlist for sign-in (full URLs or bare
+# hostnames). Loopback http (localhost, 127.0.0.1) is always allowed.
+# Empty by default (loopback only). Prefer exact callback URLs over bare
+# hostnames.
+# OAUTH_REDIRECT_URIS=https://client.example.test/callback
+
+# Not implemented; read but ignored.
+# EMAIL_BATCHING=false

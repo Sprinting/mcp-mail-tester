@@ -1,0 +1,48 @@
+{
+  "name": "mcp-mail-tester",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Write-only, rate-limited, recipient-constrained email capability exposed to an LLM as an MCP server on Cloudflare Workers.",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "rotate-token": "node scripts/rotate-token.mjs",
+    "clients": "node scripts/clients.mjs",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "1.2.4",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "worker-mailer": "1.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.4.11",
+    "@cloudflare/workers-types": "5.20261031.1",
+    "@types/node": "^26.6.6",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.0",
+    "wrangler": "4.156.0",
+    "yaml": "^2.8.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "SMTP_HOST": {
+        "description": "Your SMTP provider's host, e.g. smtp.example.com. Port 465 (implicit TLS) by default; set SMTP_PORT=587 for STARTTLS."
+      },
+      "SMTP_USERNAME": {
+        "description": "The SMTP account's address; also the sender unless SMTP_FROM is set."
+      },
+      "SMTP_PASSWORD": {
+        "description": "An SMTP app-specific password, not the account's login password."
+      },
+      "EMAIL_PER_MIN": {
+        "description": "Most emails the model may send in any 60 seconds, across all connections (an integer > 0)."
+      },
+      "MAIL_ALLOW_TO": {
+        "description": "Comma-separated bare addresses the model may email. Anything else goes to the first entry (or MAIL_DEFAULT_TO)."
+      }
+    }
+  }
+}
